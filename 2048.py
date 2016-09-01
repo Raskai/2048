@@ -11,6 +11,10 @@ import math
 driver = webdriver.Chrome();
 driver.get("https://gabrielecirulli.github.io/2048/");
 
+def read_words(words_file):
+    return [word for line in open(words_file, 'r') for word in line.split()]
+listRight = read_words('right.txt')
+
 def setNewTile(n):
 	
 	if element:
@@ -32,13 +36,13 @@ def getNew(n):
 	print (newTilePositionY);
 	print (newTilePositionX);
 	print(newTileValue);
-	gamestate = gamestate + newTileValue*16*newTilePositionX*16**newTilePositionX*16**newTilePositionY*math.log(newTileValue, 2);
+	gamestate[x+(y-1)*4] = log2(newTileValue)
 	'''Aktualizuje herní plochu v paměti. Herní plocha je vyjádřena 64-bitovým číslem, každé políčko má 16x vyšší hodnotu než
 	předchozí. Mocniny dvojek ve novém políčku jsou vynásobeny příslušnou hodnotou 16 a přidány do gamestate.'''
 	print(gamestate);
 	return;
 
-gamestate = 0;              # Definice globálních variables
+gamestate = [0] * 16;              # Definice globálních variables
 for i in range (0,2):
 	getNew(i);
 
@@ -46,6 +50,14 @@ new = 0;
 
 def right():																			# Definice funkcí na ovládání
 		ActionChains(driver).send_keys(Keys.ARROW_RIGHT).perform();
+		global gamestate;
+		line1 = gamestate[0:4]
+		line2 = gamestate[4:8]
+		line3 = gamestate[8:12]
+		line4 = gamestate[12:16]
+		line1 = listRight[gamestate[0]+16*gamestate[1]+(16**2)*gamestate[2]+(16**3)*gamestate[3])
+			
+
 def up():
 		ActionChains(driver).send_keys(Keys.ARROW_UP).perform();
 def left():
